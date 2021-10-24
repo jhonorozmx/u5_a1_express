@@ -21,8 +21,8 @@ const validateInputs = async (req, res, next) => {
     .notEmpty()
     .withMessage("Book Author is missing")
     .bail()
-    .isAlphanumeric("en-US", { ignore: /[,.&'\s]/g })
-    .withMessage("Author name can't include symbols")
+    .isAlpha("en-US", { ignore: /[,.&'\s]/g })
+    .withMessage("Author name can't include symbols or numbers")
     .run(req);
 
   // Validate Publication year input
