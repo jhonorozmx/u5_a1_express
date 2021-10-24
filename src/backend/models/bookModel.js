@@ -28,13 +28,13 @@ export default class Book {
         books = JSON.parse(data);
       }
       books.push(this);
-      writeFile(PATH, JSON.stringify(books));
+      writeFile(PATH, JSON.stringify(books),(err)=>console.error(err));
     });
   }
 
   // UPDATE DATA
   static update(books) {
-    writeFile(PATH, JSON.stringify(books));
+    writeFile(PATH, JSON.stringify(books),(err)=>console.error(err));
   }
 
   // FETCH ALL DATA
