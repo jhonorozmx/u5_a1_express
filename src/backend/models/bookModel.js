@@ -6,8 +6,6 @@ import { v4 as newGuid } from "uuid";
 // Path to Books.json
 export const PATH = path.join(cwd(), "src", "backend", "data", "books.json");
 
-console.log(PATH);
-
 export default class Book {
   constructor(data) {
     const { title, author, year } = data;
@@ -30,13 +28,13 @@ export default class Book {
         books = JSON.parse(data);
       }
       books.push(this);
-      writeFile(PATH, JSON.stringify(books), (err) => console.log(err));
+      writeFile(PATH, JSON.stringify(books));
     });
   }
 
   // UPDATE DATA
   static update(books) {
-    writeFile(PATH, JSON.stringify(books), (err) => console.log(err));
+    writeFile(PATH, JSON.stringify(books));
   }
 
   // FETCH ALL DATA

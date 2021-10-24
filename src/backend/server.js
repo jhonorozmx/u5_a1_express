@@ -1,14 +1,21 @@
 import express from "express";
 import dotenv from "dotenv";
+import path from "path";
+import { cwd } from "process";
 import bookRouter from "./routes/router.js"
 
 dotenv.config();
-const PORT = process.env.PORT || 5000;
 const app = express();
+
+//Some constants
+const PORT = process.env.PORT || 5000;
+const VIEWS = path.join(cwd(), "src", "backend", "views")
+
+
 app.use(express.json());
 
 // Set view templates directory
-app.set('views','./views')
+app.set('views',VIEWS)
 
 // Set view engine
 app.set('view engine', 'pug')
@@ -18,7 +25,7 @@ app.use(bookRouter);
 
 // Server Running
 app.get("/", (req, res) => {
-  res.send("Server is ready");
+  res.render('hello.pug');
 });
 
 // Error in the server
