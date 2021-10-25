@@ -52,7 +52,8 @@ const updateBook = (req,res)=>{
       Object.assign(bookToUpdate,body)
       Book.update(books)
       res.send({
-        message: `Book ${guid} up to date!! :D`
+        message: `${bookToUpdate.title} by ${bookToUpdate.author} up to date!! :D`,
+        guid: `${guid}`
       })
     } else {
       res.status(404).send({

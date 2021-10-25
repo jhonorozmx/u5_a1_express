@@ -35,7 +35,7 @@ const validateInputs = async (req, res, next) => {
     .withMessage("Year must include numbers only!")
     .bail()
     .isInt({ min: 1455, max: new Date().getFullYear() })
-    .withMessage("Year must be a valid year between 1455 and current year!")
+    .withMessage("Year must be a valid year between 1455 and current year")
     .toInt()
     .run(req);
 
@@ -77,13 +77,12 @@ const validateRecords = (req, res, next) => {
         .send({ message: `${title} by ${author} (${year}) already exists!` });
     }
 
-    if (exists && req.method === "PUT" && exists.guid === guid) {
-      return res.status(409).send({ message: `No changes were applied` });
-    } else if (exists && req.method === "PUT") {
+    if (exists && req.method === "PUT" && exists.guid != guid) {
       return res
         .status(409)
         .send({ message: `${title} by ${author} (${year}) already exists!` });
-    }
+    } 
+      
     next();
   });
 };
