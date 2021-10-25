@@ -34,8 +34,8 @@ const validateInputs = async (req, res, next) => {
     .isNumeric()
     .withMessage("Year must include numbers only!")
     .bail()
-    .isInt({ min: 1945, max: new Date().getFullYear() })
-    .withMessage("Year must be a valid year after 1944")
+    .isInt({ min: 1455, max: new Date().getFullYear() })
+    .withMessage("Year must be a valid year between 1455 and current year!")
     .toInt()
     .run(req);
 
@@ -59,26 +59,32 @@ const validateInputs = async (req, res, next) => {
 };
 
 const validateRecords = (req, res, next) => {
-  const {title, author, year } = req.body;
-  const {guid} = req.params
+  const { title, author, year } = req.body;
+  const { guid } = req.params;
 
   Book.getAll((books) => {
-    const exists = books.find((book) =>{
-      return book.title.toLowerCase() === title.toLowerCase() && 
-      book.author.toLowerCase() === author.toLowerCase() &&
-      book.year === year
+    const exists = books.find((book) => {
+      return (
+        book.title.toLowerCase() === title.toLowerCase() &&
+        book.author.toLowerCase() === author.toLowerCase() &&
+        book.year === year
+      );
     });
 
-    if(exists && req.method ==="POST"){
-     return res.status(409).send({message: `${title} by ${author} (${year}) already exists!`})
-    } 
-
-    if (exists && req.method === "PUT" && exists.guid === guid){
-      return res.status(409).send({message: `No changes were applied`})
-    } else if (exists && req.method === "PUT"){
-      return res.status(409).send({message: `${title} by ${author} (${year}) already exists!`})
+    if (exists && req.method === "POST") {
+      return res
+        .status(409)
+        .send({ message: `${title} by ${author} (${year}) already exists!` });
     }
-    next()
+
+    if (exists && req.method === "PUT" && exists.guid === guid) {
+      return res.status(409).send({ message: `No changes were applied` });
+    } else if (exists && req.method === "PUT") {
+      return res
+        .status(409)
+        .send({ message: `${title} by ${author} (${year}) already exists!` });
+    }
+    next();
   });
 };
 
