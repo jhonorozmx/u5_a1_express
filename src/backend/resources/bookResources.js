@@ -7,7 +7,7 @@ const bookResources = express.Router();
 bookResources.get('/', getAll)
 bookResources.post('/', validateInputs, validateRecords, createBook)
 bookResources.get('/:guid', getByGuid)
-bookResources.put('/:guid',validateRecords, validateRecords,updateBook)
+bookResources.put('/:guid',validateInputs, validateRecords,updateBook)
 bookResources.delete('/:guid', deleteBook)
 
 export default bookResources;

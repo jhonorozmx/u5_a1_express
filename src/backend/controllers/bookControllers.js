@@ -31,7 +31,7 @@ const createBook = (req,res)=> {
   const newBook = new Book(body);
   // Insert in db
   newBook.insert();
-  res.send({
+  res.status(201).send({
     message: `New book: '${newBook.title}', successfully created!! :)`,
     guid: newBook.getGuid(),
   })
@@ -41,15 +41,16 @@ const createBook = (req,res)=> {
 // Update an existing book in db 
 const updateBook = (req,res)=>{
   //Extract the body and the params from req
-  const {params:{guid},body} = req
+  const {params:{guid}, body:{title,author, year} } = req
 
   // Read db
   Book.getAll((books)=>{
     // Look for the book to update using its guid
     const bookToUpdate = books.find((book)=>book.guid === guid)
     if (bookToUpdate){
-      // We copy the properties from body into the book we want to update
-      Object.assign(bookToUpdate,body)
+      // We copy the desired properties from body into the book we want to update
+      const updatedProps = {title, author, year}
+      Object.assign(bookToUpdate, updatedProps)
       Book.update(books)
       res.send({
         message: `${bookToUpdate.title} by ${bookToUpdate.author} up to date!! :D`,

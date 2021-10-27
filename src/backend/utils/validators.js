@@ -2,25 +2,25 @@ import { body as checkBody, validationResult } from "express-validator";
 import Book from "../models/bookModel.js";
 
 // Custom sanitizer to trim and remove extra spaces from req.body.title and req.body.author
-const custom = (inputValue) => inputValue.trim().replace(/\s+/g, " ");
+const custom = (inputValue) => inputValue.toString().trim().replace(/\s+/g, " ");
 
 const validateInputs = async (req, res, next) => {
   // Validate Book Title input
   await checkBody("title")
-    .customSanitizer(custom)
     .notEmpty()
     .withMessage("Book Title is missing")
     .bail()
+    .customSanitizer(custom)
     .isAlphanumeric("en-US", { ignore: /[,.&'\s]/g })
     .withMessage("Title can't include symbols")
     .run(req);
 
   // Validate Book Author input
   await checkBody("author")
-    .customSanitizer(custom)
     .notEmpty()
     .withMessage("Book Author is missing")
     .bail()
+    .customSanitizer(custom)
     .isAlpha("en-US", { ignore: /[,.&'\s]/g })
     .withMessage("Author name can't include symbols or numbers")
     .run(req);
@@ -53,7 +53,7 @@ const validateInputs = async (req, res, next) => {
 
   if (!result.isEmpty()) {
     const errors = formatter(result);
-    return res.status(422).send(errors);
+    return res.status(400).send(errors);
   }
   next();
 };
